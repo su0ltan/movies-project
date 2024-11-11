@@ -44,10 +44,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.textOverview.setText(movie.getOverview());
         MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(context);
 
-        boolean isAdded = dbHelper.isExist(movie.getId());
+        boolean isExist = dbHelper.isExist(movie.getId());
 
         // Set initial favorite icon state
-        if (isAdded) {
+        if (isExist) {
             holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_24_cllicked);
         } else {
             holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24);
@@ -66,7 +66,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             public void onClick(View v) {
                 if (dbHelper.isExist(movie.getId())) {
                     // Remove from favorites if it exists
-//                    dbHelper.removeMovie(movie.getId());
+                  dbHelper.removeMovie(movie.getId());
                     holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24);
                     Toast.makeText(v.getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                 } else {
