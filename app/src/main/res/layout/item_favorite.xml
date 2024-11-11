@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -50,35 +51,16 @@
             android:paddingTop="8dp"
             android:gravity="end">
 
-            <!-- Watch Icon -->
+            <!-- Delete Icon -->
             <ImageButton
-                android:id="@+id/watchIcon"
+                android:id="@+id/favDeleteIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_watch_later_24"
+                android:src="@drawable/baseline_delete_24"
                 android:contentDescription="Watch Icon"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp" />
 
-            <!-- Favorite Icon -->
-            <ImageButton
-                android:id="@+id/favoriteIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_favorite_border_24"
-                android:contentDescription="Favorite Icon"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp" />
-
-            <!-- Eye Icon for Details -->
-            <ImageButton
-                android:id="@+id/detailsIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_remove_red_eye_24"
-                android:contentDescription="Details Icon"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp" />
         </LinearLayout>
     </LinearLayout>
 

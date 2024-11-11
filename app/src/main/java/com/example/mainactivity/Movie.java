@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
+
+    public boolean isItInFavorite = false;
+    public boolean isItInWatch = false;
     private boolean adult;
     private String backdropPath;
     private List<Integer> genreIds;

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMovies.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize with an empty list and update later
-        movieAdapter = new MovieAdapter(new ArrayList<>());
+        movieAdapter = new MovieAdapter(getApplicationContext(),new ArrayList<>());
         recyclerViewMovies.setAdapter(movieAdapter);
 
         // Fetch movies
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<Movie> movies) {
-        movieAdapter = new MovieAdapter(movies);
+        movieAdapter = new MovieAdapter(getApplicationContext(), movies);
             recyclerViewMovies.setAdapter(movieAdapter);
     }
 
