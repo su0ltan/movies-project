@@ -1,4 +1,9 @@
 package com.example.mainactivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
@@ -18,24 +23,18 @@ public class Movie {
     private int voteCount;
 
     // Constructor
-    public Movie(boolean adult, String backdropPath, List<Integer> genreIds, int id,
-                 String originalLanguage, String originalTitle, String overview, double popularity,
-                 String posterPath, String releaseDate, String title, boolean video,
-                 double voteAverage, int voteCount) {
-        this.adult = adult;
-        this.backdropPath = backdropPath;
-        this.genreIds = genreIds;
-        this.id = id;
-        this.originalLanguage = originalLanguage;
-        this.originalTitle = originalTitle;
-        this.overview = overview;
-        this.popularity = popularity;
-        this.posterPath = posterPath;
-        this.releaseDate = releaseDate;
+    public Movie(String title, String overview, String posterPath, String backdropPath, String releaseDate,
+                 double voteAverage, int voteCount, int id, boolean adult, List<Integer> genreIds) {
         this.title = title;
-        this.video = video;
+        this.overview = overview;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
+        this.id = id;
+        this.adult = adult;
+        this.genreIds = genreIds;
     }
 
     // Getters and Setters
@@ -80,4 +79,46 @@ public class Movie {
 
     public int getVoteCount() { return voteCount; }
     public void setVoteCount(int voteCount) { this.voteCount = voteCount; }
+
+
+    public static List<Movie> parseMovies(String jsonResponse) {
+        List<Movie> movies = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONArray resultsArray = jsonObject.getJSONArray("results");
+
+            for (int i = 0; i < resultsArray.length(); i++) {
+                JSONObject movieObject = resultsArray.getJSONObject(i);
+
+                String title = movieObject.getString("title");
+                String overview = movieObject.getString("overview");
+                String posterPath = movieObject.optString("poster_path", "");
+                String backdropPath = movieObject.optString("backdrop_path", "");
+                String releaseDate = movieObject.optString("release_date", "");
+                double voteAverage = movieObject.optDouble("vote_average", 0.0);
+                int voteCount = movieObject.optInt("vote_count", 0);
+                int id = movieObject.getInt("id");
+                boolean adult = movieObject.getBoolean("adult");
+
+                // Parse genre IDs
+                List<Integer> genreIds = new ArrayList<>();
+                JSONArray genreIdsArray = movieObject.getJSONArray("genre_ids");
+                for (int j = 0; j < genreIdsArray.length(); j++) {
+                    genreIds.add(genreIdsArray.getInt(j));
+                }
+
+                // Create Movie object and add to list
+                Movie movie = new Movie(title, overview, posterPath, backdropPath, releaseDate,
+                        voteAverage, voteCount, id, adult, genreIds);
+                movies.add(movie);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return movies;
+    }
+
+
 }
