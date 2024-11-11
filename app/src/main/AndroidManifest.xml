@@ -13,6 +13,12 @@
         android:theme="@style/Theme.MainActivity"
         tools:targetApi="33">
         <activity
+            android:name=".FavoritesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WatchListActivity"
+            android:exported="false" />
+        <activity
             android:name=".MovieDetailsActivity"
             android:exported="false" />
         <activity
