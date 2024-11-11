@@ -64,7 +64,7 @@
 
     <!-- ListView for Movies -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/WatchList_recyclerViewMovies"
+        android:id="@+id/Favorites_recyclerViewMovies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/Favorites_editTextSearch"
