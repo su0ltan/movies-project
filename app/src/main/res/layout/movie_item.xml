@@ -1,20 +1,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@drawable/border_background"
+    android:layout_marginBottom="10dp">
+    <!-- Poster Image on the Right -->
+    <ImageView
+        android:id="@+id/posterImage"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
 
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textOverview"
-        android:layout_width="wrap_content"
+        android:contentDescription="Poster Image"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="8dp" />
+
+    <!-- Text and Icons Section -->
+    <LinearLayout
+
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingTop="4dp" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Overview with fixed text length -->
+        <TextView
+            android:id="@+id/textOverview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:paddingTop="4dp" />
+
+        <!-- Action Icons: Watch, Favorite, Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:gravity="end">
+
+            <!-- Watch Icon -->
+            <ImageButton
+                android:id="@+id/watchIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_watch_later_24"
+                android:contentDescription="Watch Icon"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp" />
+
+            <!-- Favorite Icon -->
+            <ImageButton
+                android:id="@+id/favoriteIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_favorite_border_24"
+                android:contentDescription="Favorite Icon"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp" />
+
+            <!-- Eye Icon for Details -->
+            <ImageButton
+                android:id="@+id/detailsIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_remove_red_eye_24"
+                android:contentDescription="Details Icon"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 </LinearLayout>

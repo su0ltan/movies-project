@@ -50,11 +50,33 @@
         android:background="@android:drawable/edit_text" />
 
     <!-- ListView for Movies -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMovies"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/editTextSearch"
-        android:padding="8dp" />
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/editTextSearch"
+      android:padding="8dp"
+      >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Recent Movies"
+          android:textSize="30dp"
+          android:textStyle="bold"
+          android:id="@+id/txtRecentMovies"
+
+         />
+
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recyclerViewMovies"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginTop="5dp"
+          android:layout_below="@id/txtRecentMovies"
+
+
+          />
+  </RelativeLayout>
 
 </RelativeLayout>
