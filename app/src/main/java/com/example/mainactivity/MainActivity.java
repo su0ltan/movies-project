@@ -1,6 +1,9 @@
 package com.example.mainactivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -24,6 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -42,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewMovies;
     private MovieAdapter movieAdapter;
-
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+    private EditText editTextSearch;
+
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -57,15 +64,46 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMovies = findViewById(R.id.recyclerViewMovies);
         recyclerViewMovies.setLayoutManager(new LinearLayoutManager(this));
 
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Recent Movies");
+        }
+        editTextSearch = findViewById(R.id.editTextSearch);
         // Initialize with an empty list and update later
         movieAdapter = new MovieAdapter(new ArrayList<>());
         recyclerViewMovies.setAdapter(movieAdapter);
 
+
         // Fetch movies
 
         fetchMovies();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu from XML
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_watchlist) {
+            // Navigate to WatchListActivity
+            Intent intent = new Intent(this, WatchListActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_favorites) {
+            // Navigate to FavoritesActivity
+            Intent intent = new Intent(this, FavoritesActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void fetchMovies() {
@@ -109,25 +147,7 @@ public class MainActivity extends AppCompatActivity {
             recyclerViewMovies.setAdapter(movieAdapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
 }

@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SDK XML Version 3 Compatible -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
-    <!-- Title Bar -->
-    <LinearLayout
-        android:id="@+id/titleBar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#6200EE"
-        android:padding="8dp">
-
-        <!-- App Title -->
-        <TextView
-            android:id="@+id/textViewAppTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recent Movies"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <!-- Spacer -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <!-- Menu Button -->
-        <Button
-            android:id="@+id/buttonMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Menu"
-            android:textColor="#FFFFFF"
-            android:background="#6200EE" />
-    </LinearLayout>
 
     <!-- Search Bar -->
     <EditText
@@ -46,10 +10,9 @@
         android:layout_height="wrap_content"
         android:hint="Search movies..."
         android:padding="8dp"
-        android:layout_below="@id/titleBar"
         android:background="@android:drawable/edit_text" />
 
-    <!-- ListView for Movies -->
+    <!-- RecyclerView for Movies -->
 
   <RelativeLayout
       android:layout_width="match_parent"
