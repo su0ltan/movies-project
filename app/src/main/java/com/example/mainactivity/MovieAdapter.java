@@ -44,8 +44,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        String x = String.valueOf(movie.getId());
-        holder.textTitle.setText(x);
+
+        holder.textTitle.setText(movie.getTitle());
         holder.textOverview.setText(movie.getOverview());
         MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(context);
 
@@ -57,6 +57,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         } else {
             holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24);
         }
+        boolean isInWatchList = dbHelper.isMovieInWatchlist(movie.getId());
+        holder.btnWatchLater.setImageResource(isInWatchList ? R.drawable.watchlist_icon_clicked : R.drawable.baseline_watch_later_24);
 
         // Load poster image with Glide
         String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
@@ -86,6 +88,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_24_cllicked);
                     Toast.makeText(v.getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        holder.btnWatchLater.setOnClickListener(v -> {
+            if (dbHelper.isMovieInWatchlist(movie.getId())) {
+                dbHelper.removeMovieFromWatchlist(movie.getId());
+                holder.btnWatchLater.setImageResource(R.drawable.baseline_watch_later_24);
+                Toast.makeText(v.getContext(), "Removed from Watch List", Toast.LENGTH_SHORT).show();
+            } else {
+                dbHelper.insertMovieToWatchlist(movie.getId());
+                holder.btnWatchLater.setImageResource(R.drawable.watchlist_icon_clicked);
+                Toast.makeText(v.getContext(), "Added to Watch List", Toast.LENGTH_SHORT).show();
             }
         });
     }
