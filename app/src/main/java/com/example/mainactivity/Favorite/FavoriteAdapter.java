@@ -1,9 +1,11 @@
 package com.example.mainactivity.Favorite;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
@@ -35,6 +39,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         public FavoriteAdapter(Context context, List<Movie> favoriteList) {
         this.context = context;
         this.favoriteList = favoriteList;
+    }
+    public void updateData(Movie newMovie) {
+        this.favoriteList.add(newMovie);
+        String x = String.valueOf(favoriteList.size());
+        Log.d("ccc", favoriteList.toString());
+
     }
 
     @NonNull
@@ -49,6 +59,22 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
         // Bind data to each item in the list
 
+        Movie movie = favoriteList.get(position);
+
+        holder.textTitle.setText(movie.getTitle());
+        holder.textOverview.setText(movie.getOverview());
+        holder.favDeleteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Delete icon", Toast.LENGTH_SHORT).show();
+            }
+        });
+        String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
+        Glide.with(holder.posterImage)
+                .load(imageUrl)
+                .transform(new CenterCrop(), new RoundedCorners(16))
+                .into(holder.posterImage);
+
     }
 
     @Override
@@ -60,11 +86,20 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         // Define item views, for example:
         // TextView titleText;
+        ImageView posterImage;
+        TextView textTitle;
+        TextView textOverview;
+        ImageButton favDeleteIcon;
 
         public FavoriteViewHolder(@NonNull View itemView) {
             super(itemView);
             // Initialize item views, for example:
             // titleText = itemView.findViewById(R.id.titleText);
+
+            posterImage = itemView.findViewById(R.id.posterImage1);
+            textTitle = itemView.findViewById(R.id.textTitle2);
+            textOverview = itemView.findViewById(R.id.textOverview2);
+            favDeleteIcon = itemView.findViewById(R.id.favDeleteIcon);
         }
 
 

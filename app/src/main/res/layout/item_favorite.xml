@@ -8,7 +8,7 @@
     android:layout_marginBottom="10dp">
     <!-- Poster Image on the Right -->
     <ImageView
-        android:id="@+id/posterImage"
+        android:id="@+id/posterImage1"
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:contentDescription="Poster Image"
@@ -27,7 +27,7 @@
 
         <!-- Title -->
         <TextView
-            android:id="@+id/textTitle"
+            android:id="@+id/textTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -35,7 +35,7 @@
 
         <!-- Overview with fixed text length -->
         <TextView
-            android:id="@+id/textOverview"
+            android:id="@+id/textOverview2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="3"

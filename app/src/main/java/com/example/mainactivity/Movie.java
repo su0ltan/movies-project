@@ -126,6 +126,38 @@ public class Movie implements Serializable{
 
         return movies;
     }
+    public static Movie parseMovie(String jsonResponse) {
+
+        JSONObject jsonObject = null;
+        Movie movie = null;
+        try {
+            jsonObject = new JSONObject(jsonResponse);
+            List <Integer> genreIds = new ArrayList<>();
+            movie  = new Movie(
+                    jsonObject.getString("title"),
+                    jsonObject.getString("overview"),
+                    jsonObject.getString("poster_path"),
+                    jsonObject.getString("backdrop_path"),
+                    jsonObject.getString("release_date"),
+                    jsonObject.getDouble("vote_average"),
+                    jsonObject.getInt("vote_count"),
+                    jsonObject.getInt("id"),
+                    jsonObject.getBoolean("adult"),
+                    genreIds,
+                    jsonObject.getString("original_language"),
+                    jsonObject.getString("original_title")
+            );
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+
+
+        }
+
+
+
+        return movie;
+
+    }
 
 
 }
