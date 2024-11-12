@@ -1,6 +1,7 @@
 package com.example.mainactivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -23,8 +24,10 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private List<Movie> movies;
+    private static List<Movie> movies;
     Context context;
+
+
 
     public MovieAdapter(Context context, List<Movie> movies) {
         this.movies = movies; this.context=context;
@@ -60,6 +63,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .transform(new CenterCrop(), new RoundedCorners(16))
                 .into(holder.posterView);
 
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), MovieDetailsActivity.class);
+            intent.putExtra("movie", movie);
+            v.getContext().startActivity(intent);
+        });
+
         // Set up favorite button toggle functionality
         holder.btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +97,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     static class MovieViewHolder extends RecyclerView.ViewHolder {
         TextView textTitle;
         TextView textOverview;
-
+        TextView textRateCount;
+        TextView textRateAvg;
+        TextView textlanguage;
         ImageView posterView;
 
         ImageButton btnWatchLater, btnFavorite, btnViewDetails;
@@ -97,10 +108,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
             textOverview = itemView.findViewById(R.id.textOverview);
+            textRateCount = itemView.findViewById(R.id.textViewRateCount);
+            textRateAvg = itemView.findViewById(R.id.textViewRateAvg);
+            textlanguage= itemView.findViewById(R.id.textViewlanguage);
             posterView = itemView.findViewById(R.id.posterImage);
             btnFavorite = itemView.findViewById(R.id.favoriteIcon);
             btnWatchLater = itemView.findViewById(R.id.watchIcon);
             btnViewDetails = itemView.findViewById(R.id.detailsIcon);
+
 
 
 
