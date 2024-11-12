@@ -5,8 +5,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-public class Movie {
+import java.io.Serializable;
+public class Movie implements Serializable{
 
     public boolean isItInFavorite = false;
     public boolean isItInWatch = false;
@@ -27,7 +27,7 @@ public class Movie {
 
     // Constructor
     public Movie(String title, String overview, String posterPath, String backdropPath, String releaseDate,
-                 double voteAverage, int voteCount, int id, boolean adult, List<Integer> genreIds) {
+                 double voteAverage, int voteCount, int id, boolean adult, List<Integer> genreIds, String originalTitle , String originalLanguage) {
         this.title = title;
         this.overview = overview;
         this.posterPath = posterPath;
@@ -38,6 +38,8 @@ public class Movie {
         this.id = id;
         this.adult = adult;
         this.genreIds = genreIds;
+        this.originalLanguage=originalLanguage;
+        this.originalTitle=originalTitle;
     }
 
     // Getters and Setters
@@ -96,9 +98,11 @@ public class Movie {
 
                 String title = movieObject.getString("title");
                 String overview = movieObject.getString("overview");
+                String originalTitle = movieObject.optString("original_title","");
                 String posterPath = movieObject.optString("poster_path", "");
                 String backdropPath = movieObject.optString("backdrop_path", "");
                 String releaseDate = movieObject.optString("release_date", "");
+                String originalLanguage = movieObject.optString("original_language","");
                 double voteAverage = movieObject.optDouble("vote_average", 0.0);
                 int voteCount = movieObject.optInt("vote_count", 0);
                 int id = movieObject.getInt("id");
@@ -113,7 +117,7 @@ public class Movie {
 
                 // Create Movie object and add to list
                 Movie movie = new Movie(title, overview, posterPath, backdropPath, releaseDate,
-                        voteAverage, voteCount, id, adult, genreIds);
+                        voteAverage, voteCount, id, adult, genreIds, originalTitle, originalLanguage);
                 movies.add(movie);
             }
         } catch (JSONException e) {
