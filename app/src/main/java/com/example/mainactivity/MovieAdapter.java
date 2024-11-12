@@ -40,7 +40,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
-        holder.textTitle.setText(movie.getTitle());
+
+        String x = String.valueOf(movie.getId());
+        holder.textTitle.setText(x);
         holder.textOverview.setText(movie.getOverview());
         MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(context);
 

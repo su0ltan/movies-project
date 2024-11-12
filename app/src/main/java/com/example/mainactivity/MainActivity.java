@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2024")
+                    .url("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2010")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer "+ key)
