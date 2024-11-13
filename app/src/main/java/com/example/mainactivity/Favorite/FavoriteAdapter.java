@@ -1,5 +1,6 @@
 package com.example.mainactivity.Favorite;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoriteViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // Bind data to each item in the list
 
         Movie movie = favoriteList.get(position);
@@ -66,7 +67,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         holder.favDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Delete icon", Toast.LENGTH_SHORT).show();
+                MovieDatabaseHelper movieDatabaseHelper = new MovieDatabaseHelper(context);
+
+                movieDatabaseHelper.removeMovie(movie.getId());
+
+                favoriteList.remove(position);
+                notifyDataSetChanged();
+
             }
         });
         String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
