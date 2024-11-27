@@ -46,6 +46,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         buttonRateMovie = findViewById(R.id.buttonRateMovie);
         Movie movie = (Movie) getIntent().getSerializableExtra("movie");
 
+
+
+        movie.actors.forEach(s -> {
+
+            System.out.println("actors: " + s);
+
+
+        });
         if (movie != null) {
             // Set movie details
             textViewTitle.setText(movie.getOriginalTitle());

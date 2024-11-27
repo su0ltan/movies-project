@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -52,6 +55,12 @@ public class FavoritesActivity extends AppCompatActivity {
 
     private ExecutorService executorService;
     private Handler mainHandler;
+    private List<Movie> filteredMovies; // Filtered results
+
+    private EditText editTextSearch;
+    List<Movie> movies;
+
+
 
 
     @Override
@@ -60,11 +69,35 @@ public class FavoritesActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_favorites);
 
+
         favoriteRecylcle = findViewById(R.id.Favorites_recyclerViewMovies);
         favoriteRecylcle.setLayoutManager(new LinearLayoutManager(this));
         favoriteAdapter = new FavoriteAdapter(getApplicationContext(),movieList);
         favoriteRecylcle.setAdapter(favoriteAdapter);
 
+
+        editTextSearch = findViewById(R.id.Favorites_editTextSearch);
+        filteredMovies = new ArrayList<>();
+
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                filterMovies(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         if (getSupportActionBar() != null) {
@@ -77,19 +110,52 @@ public class FavoritesActivity extends AppCompatActivity {
         fetchMovies();
     }
 
+
+    private void filterMovies(String query) {
+        filteredMovies.clear();
+
+        if (query.isEmpty()) {
+            filteredMovies.addAll(movies); // Show all movies if query is empty
+        } else {
+            String lowerCaseQuery = query.toLowerCase();
+
+            for (Movie movie : movies) {
+                // Check title or overview
+                if (movie.getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        movie.getOverview().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredMovies.add(movie);
+                    continue; // Skip to the next movie
+                }
+
+                // Check genres
+                for (String genre : movie.getGenres()) {
+                    if (genre.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other genres
+                    }
+                }
+
+                // Check ac
+            }
+        }
+
+        // Update UI with the filtered list
+        updateRecyclerView(filteredMovies);
+    }
     private void fetchMovies() {
         executorService.execute(() -> {
             OkHttpClient client = new OkHttpClient();
+            movies= new ArrayList<>();
 
             MovieDatabaseHelper movieDatabaseHelper = new MovieDatabaseHelper(getApplicationContext());
             List<Integer> ids = movieDatabaseHelper.readMovies();
 
-            List<Movie> movies = new ArrayList<>();
+
             ids.forEach(id -> {
                 String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
 
                 Request request = new Request.Builder()
-                        .url("https://api.themoviedb.org/3/movie/" + id + "?language=en-US")
+                        .url("https://api.themoviedb.org/3/movie/" + id + "?append_to_response=credits&language=en-US")
                         .get()
                         .addHeader("accept", "application/json")
                         .addHeader("Authorization", "Bearer " + key)
@@ -114,9 +180,16 @@ public class FavoritesActivity extends AppCompatActivity {
             });
 
             // Update RecyclerView on the main thread
-//            runOnUiThread(() -> updateRecyclerView(movies));
+//          runOnUiThread(() -> updateRecyclerView(movies));
         });
     }
+
+
+    private void updateRecyclerView(List<Movie> movies) {
+        favoriteAdapter = new FavoriteAdapter(this,movies);
+        favoriteRecylcle.setAdapter(favoriteAdapter);
+    }
+
 
 
     private void updateRecyclerView(Movie movie) {

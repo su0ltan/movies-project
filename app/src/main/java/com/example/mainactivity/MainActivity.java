@@ -6,12 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.mainactivity.models.Person;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -53,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextSearch;
 
 
+    private List<Movie> movies;
+    private List<Movie> filteredMovies; // Filtered results
+
+
     @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMovies = findViewById(R.id.recyclerViewMovies);
         recyclerViewMovies.setLayoutManager(new LinearLayoutManager(this));
 
+        filteredMovies = new ArrayList<>();
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Recent Movies");
@@ -74,10 +84,63 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMovies.setAdapter(movieAdapter);
 
 
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMovies(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         // Fetch movies
 
         fetchMovies();
     }
+
+
+    private void filterMovies(String query) {
+        filteredMovies.clear();
+
+        if (query.isEmpty()) {
+            filteredMovies.addAll(movies); // Show all movies if query is empty
+        } else {
+            String lowerCaseQuery = query.toLowerCase();
+
+            for (Movie movie : movies) {
+                // Check title or overview
+                if (movie.getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        movie.getOverview().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredMovies.add(movie);
+                    continue; // Skip to the next movie
+                }
+
+                // Check genres
+                for (String genre : movie.getGenres()) {
+                    if (genre.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other genres
+                    }
+                }
+
+                // Check ac
+            }
+        }
+
+        // Update UI with the filtered list
+        updateRecyclerView(filteredMovies);
+    }
+
+
 
 
 
@@ -137,7 +200,16 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     // Parse response to list of movies
 
-                    List<Movie> movies = Movie.parseMovies(response.body().string());
+                    movies = Movie.parseMovies(response.body().string());
+
+                    System.out.println("mmm "+movies.get(1).getTitle());
+                    System.out.println("mmm "+movies.get(1).getId());
+
+                    movies.get(1).genres.forEach(s -> {
+
+                       System.out.println("mmm "+s);
+
+                   });
 
                     // Update UI on the main thread
                     mainThreadHandler.post(() -> updateRecyclerView(movies));

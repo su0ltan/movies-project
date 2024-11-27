@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mainactivity.Favorite.FavoriteAdapter;
 import com.example.mainactivity.Favorite.MovieDatabaseHelper;
 
 import java.io.IOException;
@@ -41,6 +45,10 @@ public class WatchListActivity extends AppCompatActivity {
 
     private ExecutorService executorService;
     private Handler mainHandler;
+
+    private List<Movie> filteredMovies; // Filtered results
+    private EditText editTextSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +64,70 @@ public class WatchListActivity extends AppCompatActivity {
         watchListAdapter = new WatchListAdapter(this, movieList);
         watchListRecyclerView.setAdapter(watchListAdapter);
 
+        editTextSearch = findViewById(R.id.WatchList_editTextSearch);
+        filteredMovies = new ArrayList<>();
+
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                filterMovies(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         executorService = Executors.newFixedThreadPool(3);
         mainHandler = new Handler(Looper.getMainLooper());
         fetchMovies();
     }
+
+    private void filterMovies(String query) {
+        filteredMovies.clear();
+
+        if (query.isEmpty()) {
+            filteredMovies.addAll(movieList); // Show all movies if query is empty
+        } else {
+            String lowerCaseQuery = query.toLowerCase();
+
+            for (Movie movie : movieList) {
+                // Check title or overview
+                if (movie.getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        movie.getOverview().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredMovies.add(movie);
+                    continue; // Skip to the next movie
+                }
+
+                // Check genres
+                for (String genre : movie.getGenres()) {
+                    if (genre.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other genres
+                    }
+                }
+
+                // Check ac
+            }
+        }
+
+        // Update UI with the filtered list
+        updateRecyclerView(filteredMovies);
+    }
+
+    private void updateRecyclerView(List<Movie> movies) {
+        watchListAdapter = new WatchListAdapter(this,movies);
+        watchListRecyclerView.setAdapter(watchListAdapter);
+    }
+
 
 
 

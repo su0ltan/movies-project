@@ -45,7 +45,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = movies.get(position);
 
 
-        holder.textTitle.setText(movie.getTitle());
+
+        holder.textTitle.setText(String.valueOf(movie.getTitle()));
         holder.textOverview.setText(movie.getOverview());
         MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(context);
 
