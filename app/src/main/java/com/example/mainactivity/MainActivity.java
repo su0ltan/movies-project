@@ -34,7 +34,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private EditText editTextSearch;
+    private ToggleButton toggleButton;
+    private boolean isShowingRecentMovies = true; // Default to showing recent movies
 
 
     private List<Movie> movies;
@@ -78,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Recent Movies");
         }
+        toggleButton = findViewById(R.id.toggleButton);
+
+        // Set up the ToggleButton listener
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isShowingRecentMovies = !isChecked; // Toggle between recent and top rated
+            updateMovieList();
+        });
+
+        updateMovieList();
         editTextSearch = findViewById(R.id.editTextSearch);
         // Initialize with an empty list and update later
         movieAdapter = new MovieAdapter(getApplicationContext(),new ArrayList<>());
@@ -104,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Fetch movies
 
-        fetchMovies();
+
     }
 
 
@@ -180,16 +193,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fetchMovies() {
+    private void fetchMovies(boolean fetchRecentMovies) {
 
         executorService.execute(() -> {
             OkHttpClient client = new OkHttpClient();
 
                 String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
-
+            String url;
+            if (fetchRecentMovies) {
+                // Fetch recent movies
+                url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2024";
+            } else {
+                // Fetch top-rated movies (30 movies across two pages)
+                url = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
+            }
 
             Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2024")
+                    .url(url)
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer "+ key)
@@ -211,8 +231,20 @@ public class MainActivity extends AppCompatActivity {
 
                    });
 
+
+
                     // Update UI on the main thread
-                    mainThreadHandler.post(() -> updateRecyclerView(movies));
+                    mainThreadHandler.post(() -> {updateRecyclerView(movies);
+                        movieAdapter.notifyDataSetChanged();
+                        if (fetchRecentMovies) {
+                            if (getSupportActionBar() != null) {
+                                getSupportActionBar().setTitle("Recent Movies");
+                            }
+                        } else {
+                            if (getSupportActionBar() != null) {
+                                getSupportActionBar().setTitle("Top Rated Movies");
+                            }
+                        }});
                 } else {
                     mainThreadHandler.post(() -> Toast.makeText(MainActivity.this, "Failed to fetch movies", Toast.LENGTH_SHORT).show());
                 }
@@ -229,7 +261,22 @@ public class MainActivity extends AppCompatActivity {
     private void updateRecyclerView(List<Movie> movies) {
         movieAdapter = new MovieAdapter(getApplicationContext(), movies);
             recyclerViewMovies.setAdapter(movieAdapter);
+        TextView txtRecentMovies = findViewById(R.id.txtRecentMovies);
+        if (isShowingRecentMovies) {
+            txtRecentMovies.setText("Recent Movies");
+        } else {
+            txtRecentMovies.setText("Top Rated Movies");
+        }
     }
+    private void updateMovieList() {
+        if (isShowingRecentMovies) {
+            fetchMovies(true); // Fetch recent movies
+        } else {
+            fetchMovies(false); // Fetch top-rated movies
+        }
+    }
+
+
 
 
 
