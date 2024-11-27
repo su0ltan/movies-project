@@ -66,7 +66,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         holder.favDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Delete icon", Toast.LENGTH_SHORT).show();
+                MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(context);
+                dbHelper.removeMovie(movie.getId());
+                favoriteList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, favoriteList.size());
             }
         });
         String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();

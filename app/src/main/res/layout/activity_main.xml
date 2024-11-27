@@ -13,6 +13,16 @@
         android:background="@android:drawable/edit_text" />
 
     <!-- RecyclerView for Movies -->
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="Show Top Rated"
+        android:textOn="Show Recent"
+        android:layout_below="@id/editTextSearch"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"/>
 
   <RelativeLayout
       android:layout_width="match_parent"
@@ -41,5 +51,6 @@
 
           />
   </RelativeLayout>
+
 
 </RelativeLayout>
