@@ -129,6 +129,10 @@
                 android:layout_height="wrap_content"
                 android:text="Rate Movie"
                 android:layout_marginStart="8dp" />
+            <!-- User Rating -->
+
+
+
 
         </LinearLayout>
 
