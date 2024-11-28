@@ -10,9 +10,7 @@ import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,8 +26,6 @@ import org.json.JSONObject;
 import com.bumptech.glide.Glide;
 import com.example.mainactivity.Favorite.MovieDatabaseHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -76,14 +72,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
 
-        movie.actors.forEach(s -> {
 
-            System.out.println("actors: " + s);
-
-
-        });
-        movie = (Movie) getIntent().getSerializableExtra("movie");
-        MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(this);
+            MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(this);
         if (movie != null) {
             // Set movie details
             textViewTitle.setText(movie.getOriginalTitle());
