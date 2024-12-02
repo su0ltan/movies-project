@@ -189,7 +189,8 @@ public class Movie implements Serializable{
                 int id = movieObject.getInt("id");
                 boolean adult = movieObject.getBoolean("adult");
 
-                p = getActors(id);
+//                p = getActors(id);
+                p = new ArrayList<>();
 
                 // Parse genre IDs
                 List<Integer> genreIds = new ArrayList<>();
@@ -216,7 +217,7 @@ public class Movie implements Serializable{
 
                 // Create Movie object and add to list
                 Movie movie = new Movie(title, overview, posterPath, backdropPath, releaseDate,
-                        voteAverage, voteCount, id, adult, genreIds, originalTitle, originalLanguage, genres, p);
+                        voteAverage, voteCount, id, adult, genreIds, originalTitle, originalLanguage, genres,p);
                 movies.add(movie);
             }
         } catch (JSONException e) {
@@ -226,48 +227,48 @@ public class Movie implements Serializable{
         return movies;
     }
 
-    private static List<Person> getActors(int id) {
-
-        final List<Person>[] persons = new List[]{new ArrayList<>()};
-
-
-         final ExecutorService executorService = Executors.newSingleThreadExecutor();
-         final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-        executorService.execute(() -> {
-            OkHttpClient client = new OkHttpClient();
-
-            String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
-
-
-            Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/movie/"+id+"/credits?language=en-US")
-                    .get()
-                    .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer "+ key)
-                    .build();
-
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful() && response.body() != null) {
-                    // Parse response to list of movies
-
-
-                    persons[0] = Person.parsePerson(response.body().string());
-
-
-
-
-                    // Update UI on the main thread
-                } else {
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        return persons[0];
-
-    }
+//    private static List<Person> getActors(int id) {
+//
+//        final List<Person>[] persons = new List[]{new ArrayList<>()};
+//
+//
+//         final ExecutorService executorService = Executors.newSingleThreadExecutor();
+//         final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+//        executorService.execute(() -> {
+//            OkHttpClient client = new OkHttpClient();
+//
+//            String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
+//
+//
+//            Request request = new Request.Builder()
+//                    .url("https://api.themoviedb.org/3/movie/"+id+"/credits?language=en-US")
+//                    .get()
+//                    .addHeader("accept", "application/json")
+//                    .addHeader("Authorization", "Bearer "+ key)
+//                    .build();
+//
+//            try {
+//                Response response = client.newCall(request).execute();
+//                if (response.isSuccessful() && response.body() != null) {
+//                    // Parse response to list of movies
+//
+//
+//                    persons[0] = Person.parsePerson(response.body().string());
+//
+//
+//
+//
+//                    // Update UI on the main thread
+//                } else {
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        return persons[0];
+//
+//    }
 
     public static Movie parseMovie(String jsonResponse) {
 
@@ -280,12 +281,22 @@ public class Movie implements Serializable{
 
 
 
+
+
          List<Person> p = new ArrayList<>();
 
-         List<String> genre = new ArrayList<>();
+            List<String> genre = new ArrayList<>();
             for (int j = 0; j < genreIdsArray.length(); j++) {
-                genre.add(genreIdsArray.getString(j));
+                JSONObject genreObject = genreIdsArray.getJSONObject(j); // Get the object at index j
+                String name = genreObject.getString("name"); // Extract the "name" field
+                genre.add(name);
+
             }
+
+
+
+
+
             movie  = new Movie(
                     jsonObject.getString("title"),
                     jsonObject.getString("overview"),
@@ -297,8 +308,9 @@ public class Movie implements Serializable{
                     jsonObject.getInt("id"),
                     jsonObject.getBoolean("adult"),
                     genreIds,
-                    jsonObject.getString("original_language"),
+
                     jsonObject.getString("original_title"),
+                    jsonObject.getString("original_language"),
                     genre,
                     p
 
