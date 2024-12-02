@@ -8,33 +8,116 @@
         android:id="@+id/editTextSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Search movies..."
+        android:hint="@string/searchMovie"
         android:padding="8dp"
         android:background="@android:drawable/edit_text" />
+
+
+    <LinearLayout
+        android:id="@+id/genreLayout"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@id/editTextSearch"
+
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvAll"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginStart="8dp"
+            android:text="@string/genre_all"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/cloud_text_selected_bg" />
+
+        <TextView
+            android:id="@+id/tvAnimation"
+            android:layout_width="80dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/genre_animation"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/cloud_text_bg" />
+
+        <TextView
+            android:id="@+id/tvAction"
+            android:layout_width="60dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+
+            android:layout_marginStart="8dp"
+            android:text="@string/genre_action"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/cloud_text_bg" />
+
+        <TextView
+            android:id="@+id/tvDrama"
+            android:gravity="center"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+
+            android:layout_marginStart="8dp"
+            android:text="@string/genre_drama"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/cloud_text_bg" />
+
+        <TextView
+            android:id="@+id/tvCrime"
+            android:layout_width="60dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+
+            android:layout_marginStart="8dp"
+            android:text="@string/genre_crime"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:background="@drawable/cloud_text_bg" />
+    </LinearLayout>
+
 
     <!-- RecyclerView for Movies -->
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textOff="Show Top Rated"
-        android:textOn="Show Recent"
-        android:layout_below="@id/editTextSearch"
+        android:textOff="@string/showTopRated"
+        android:textOn="@string/showRecent"
+        android:background="@drawable/toggle_button_background"
+        android:layout_below="@id/genreLayout"
         android:layout_marginTop="8dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp"
+
+
+        android:drawableLeft="@drawable/baseline_star_rate_24" />
+
 
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/editTextSearch"
+      android:layout_below="@id/genreLayout"
       android:padding="8dp"
       >
 
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Recent Movies"
+          android:text="@string/recentMovies"
           android:textSize="30dp"
           android:textStyle="bold"
           android:id="@+id/txtRecentMovies"

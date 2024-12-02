@@ -69,9 +69,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .into(holder.posterView);
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), MovieDetailsActivity.class);
+            Context context = v.getContext();
+            Intent intent = new Intent(context, MovieDetailsActivity.class);
             intent.putExtra("movie", movie);
-            v.getContext().startActivity(intent);
+          context.startActivity(intent);
         });
 
         // Set up favorite button toggle functionality
@@ -82,24 +83,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     // Remove from favorites if it exists
                   dbHelper.removeMovie(movie.getId());
                     holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_border_24);
-                    Toast.makeText(v.getContext(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), context.getString(R.string.removedFromFavorites), Toast.LENGTH_SHORT).show();
                 } else {
                     // Add to favorites if it doesn't exist
                     dbHelper.insertMovie(movie.getId());
                     holder.btnFavorite.setImageResource(R.drawable.baseline_favorite_24_cllicked);
-                    Toast.makeText(v.getContext(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), context.getString(R.string.addedToFavorites), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        holder.btnViewDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Context context = v.getContext();
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra("movie", movie);
+                context.startActivity(intent);
             }
         });
         holder.btnWatchLater.setOnClickListener(v -> {
             if (dbHelper.isMovieInWatchlist(movie.getId())) {
                 dbHelper.removeMovieFromWatchlist(movie.getId());
                 holder.btnWatchLater.setImageResource(R.drawable.baseline_watch_later_24);
-                Toast.makeText(v.getContext(), "Removed from Watch List", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), context.getString(R.string.removedFromWatchList), Toast.LENGTH_SHORT).show();
             } else {
                 dbHelper.insertMovieToWatchlist(movie.getId());
                 holder.btnWatchLater.setImageResource(R.drawable.watchlist_icon_clicked);
-                Toast.makeText(v.getContext(), "Added to Watch List", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), context.getString(R.string.addedToWatchList), Toast.LENGTH_SHORT).show();
             }
         });
     }

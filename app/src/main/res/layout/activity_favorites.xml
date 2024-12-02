@@ -8,7 +8,7 @@
         android:id="@+id/Favorites_editTextSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Search movies..."
+        android:hint="@string/searchMovie"
         android:layout_marginTop="80dp"
         android:padding="8dp"
         android:background="@android:drawable/edit_text" />

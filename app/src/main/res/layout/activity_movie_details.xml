@@ -15,8 +15,8 @@
             android:id="@+id/imageViewPoster"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="90dp"
-            android:contentDescription="Movie Poster"
+            android:layout_marginTop="82dp"
+            android:contentDescription="@string/moviePoster"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,32 +43,43 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:paddingStart="10dp">
 
                 <!-- Movie Title -->
                 <TextView
                     android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Movie Title"
+                    android:text="@string/movieTitle"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="#000000" />
 
+                <TextView
+
+                    android:id="@+id/txtGenre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#757575"
+                   />
                 <!-- Release Date -->
                 <TextView
                     android:id="@+id/textViewReleaseDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Release Date: YYYY-MM-DD"
+                    android:text="@string/releaseDate"
                     android:textSize="16sp"
                     android:textColor="#757575"
                     android:layout_marginTop="4dp" />
+
                 <TextView
                     android:id="@+id/textViewlanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="language:"
+                    android:text="@string/language"
                     android:textSize="16sp"
                     android:textColor="#757575"
                     android:layout_marginTop="4dp" />
@@ -76,7 +87,7 @@
                     android:id="@+id/textViewRateCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rate Count:"
+                    android:text="@string/rateCount"
                     android:textSize="16sp"
                     android:textColor="#757575"
                     android:layout_marginTop="4dp" />
@@ -84,10 +95,12 @@
                     android:id="@+id/textViewRateAvg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rate:"
+                    android:text="@string/rate"
                     android:textSize="16sp"
                     android:textColor="#757575"
                     android:layout_marginTop="4dp" />
+
+
                 <LinearLayout
                     android:id="@+id/linearLayoutButtons"
                     android:layout_width="wrap_content"
@@ -104,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/watchlist_moviedetail"
-                        android:contentDescription="Watchlist Icon"
+                        android:contentDescription="@string/watchlistIcon"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="4dp" />
 
@@ -114,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/favorate_moviedetails"
-                        android:contentDescription="Favorite Icon"
+                        android:contentDescription="@string/favoriteIcon"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="4dp"
                         android:layout_marginStart="8dp" />
@@ -127,9 +140,25 @@
                 android:id="@+id/buttonRateMovie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rate Movie"
-                android:layout_marginStart="8dp" />
+                android:text="@string/rate"
+                android:background="@drawable/button_gradient"
+                android:textColor="#FFFFFF"
+                android:paddingHorizontal="16dp"
+                android:drawableStart="@drawable/baseline_star_rate_24"
+                android:paddingVertical="8dp" />
+
+            <TextView
+                android:id="@+id/txtrated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_margin="20dp"
+                android:visibility="gone"
+                android:textColor="#757575"
+                android:layout_marginTop="4dp" />
             <!-- User Rating -->
+
 
 
 
@@ -151,28 +180,29 @@
             android:id="@+id/textViewOverviewLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Overview"
+            android:text="@string/overview"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#000000"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleDateRate"
             app:layout_constraintStart_toStartOf="parent"
-            android:paddingLeft="10dp"/>
+            android:paddingStart="10dp"/>
 
         <!-- Overview Text -->
         <TextView
             android:id="@+id/textViewOverview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Movie overview goes here..."
+            android:text="@string/movieOverviewGoesHere"
             android:textSize="16sp"
             android:textColor="#333333"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/textViewOverviewLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingLeft="10dp"/>
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"/>
 
         <!-- Action Buttons -->
 

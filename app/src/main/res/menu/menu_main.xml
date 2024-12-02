@@ -2,14 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Existing menu items -->
     <item
         android:id="@+id/action_watchlist"
-        android:title="Watch List"
+        android:title="@string/watchList"
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_favorites"
-        android:title="Favorites"
+        android:title="@string/favorites"
         android:orderInCategory="101"
         app:showAsAction="never" />
+
+    <!-- New Change Language menu item -->
+    <item
+        android:id="@+id/action_change_language"
+        android:title="Change Language"
+        android:orderInCategory="102"
+        android:icon="@drawable/baseline_language_24"
+    app:showAsAction="always" />
 </menu>

@@ -1,7 +1,9 @@
 package com.example.mainactivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ import com.example.mainactivity.Favorite.MovieDatabaseHelper;
 
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,11 +43,13 @@ import okhttp3.Response;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView imageViewPoster;
-    private TextView textViewTitle, textViewReleaseDate, textViewOverview, textViewRateCount, textViewRateAvg, textlanguage;
+    private TextView txtGenree,  textViewTitle, textViewReleaseDate, textViewOverview, textViewRateCount, textViewRateAvg, textlanguage;
     private Button  buttonRateMovie;
     private ImageButton watchIcon, favoriteIcon;
     Movie movie;
+    String genres = "";
     private String guestSessionId;
+    TextView rated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,20 +74,57 @@ public class MovieDetailsActivity extends AppCompatActivity {
         watchIcon = findViewById(R.id.watchIcon);
         favoriteIcon = findViewById(R.id.favoriteIcon);
         buttonRateMovie = findViewById(R.id.buttonRateMovie);
-        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
+        txtGenree = findViewById(R.id.txtGenre);
+         rated = findViewById(R.id.txtrated);
 
+
+        movie = (Movie) getIntent().getSerializableExtra("movie");
+        if (movie == null) {
+            Toast.makeText(this, "Movie details not available", Toast.LENGTH_SHORT).show();
+            finish(); // Exit the activity to avoid further issues
+            return;
+        }
 
 
 
             MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(this);
+
         if (movie != null) {
             // Set movie details
+            genres = "";
+            movie.genres.forEach(s -> {
+                genres =genres +  "#" +s.toString() + " ";
+            });
+            txtGenree.setText(genres);
+
+
+            // Check if the movie exists in the database
+            if (dbHelper.isRated(movie.getId())) {
+                // Movie exists, get the rating and update UI
+                Double rating = dbHelper.getRate(movie.getId());
+                if (rating != null) {
+                    buttonRateMovie.setVisibility(View.INVISIBLE);
+                    rated.setText(getString(R.string.yourRate) + "\n" + String.valueOf(rating));
+                    rated.setVisibility(View.VISIBLE);
+                }
+            } else {
+                // Movie does not exist, show the button
+                buttonRateMovie.setVisibility(View.VISIBLE);
+                rated.setVisibility(View.INVISIBLE);
+            }
+
+
             textViewTitle.setText(movie.getOriginalTitle());
-            textViewReleaseDate.setText("Release Date: " + movie.getReleaseDate());
+            textViewReleaseDate.setText(getString(R.string.releaseDate) + " " +movie.getReleaseDate());
             textViewOverview.setText(movie.getOverview());
-            textlanguage.setText("language: "+movie.getOriginalLanguage());
-            textViewRateCount.setText("Rating Count: "+movie.getVoteCount());
-            textViewRateAvg.setText("Rating Avrage: "+movie.getVoteAverage());
+            String lang = "en";
+            if(movie.getOriginalLanguage().equals("en"))lang = "English";
+            else lang = movie.getOriginalLanguage();
+            textlanguage.setText(getString(R.string.language) + ": " + lang);
+            textViewRateCount.setText(getString(R.string.rateCount) + " "+movie.getVoteCount());
+            textViewRateAvg.setText(getString(R.string.ratingAverage) + " "+movie.getVoteAverage());
+
+
 
             String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getBackdropPath();
             Glide.with(this)
@@ -89,7 +132,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     .into(imageViewPoster);
             boolean isInFavorites = dbHelper.isExist(movie.getId());
             boolean isInWatchlist = dbHelper.isMovieInWatchlist(movie.getId());
-            updateIconStates();
+
+
+            if (isInFavorites) {
+                favoriteIcon.setImageResource(R.drawable.favorate_moviedetails_clicked);
+            } else {
+                favoriteIcon.setImageResource(R.drawable.favorate_moviedetails);
+            }
+
+            if (isInWatchlist) {
+                watchIcon.setImageResource(R.drawable.watchlist_moviedetaail_clicked);
+            } else {
+                watchIcon.setImageResource(R.drawable.watchlist_moviedetail);
+            }
+
+//         updateIconStates();
+
+
+
+
+
             favoriteIcon.setOnClickListener(v -> {
                 if (dbHelper.isExist(movie.getId())) {
                     dbHelper.removeMovie(movie.getId());
@@ -111,7 +173,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             });
             buttonRateMovie.setOnClickListener(v -> {
                 if (guestSessionId == null) {
-                    Toast.makeText(MovieDetailsActivity.this, "Guest session not available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MovieDetailsActivity.this, getString(R.string.guestSessionNotAvailable), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showRatingDialog();
@@ -123,13 +185,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateIconStates();
+
     }
 
 
     private void showRatingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Rate Movie");
+        builder.setTitle(getString(R.string.rateMovie));
 
         // Set up the input (Number Picker)
         final NumberPicker numberPicker = new NumberPicker(this);
@@ -145,12 +207,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         builder.setView(numberPicker);
 
         // Set up the buttons
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
             int valueIndex = numberPicker.getValue() - 1;
             double rating = 0.5 + (0.5 * valueIndex);
             submitRating(rating);
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
 
         builder.show();
     }
@@ -158,6 +220,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
     private void submitRating(double rating) {
+
+        if (movie == null) {
+            Toast.makeText(this, "Unable to submit rating: Movie details are missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -197,14 +264,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                     handler.post(() -> {
                         // Display the status message to the user
+                        buttonRateMovie.setVisibility(View.INVISIBLE);
+                        TextView rated = findViewById(R.id.txtrated);
+                        rated.setText(getString(R.string.yourRate) +"\n"+String.valueOf(rating));
+                        rated.setVisibility(View.VISIBLE);
                         Toast.makeText(MovieDetailsActivity.this, statusMessage, Toast.LENGTH_LONG).show();
+                        MovieDatabaseHelper d = new MovieDatabaseHelper(this);
+                        d.insertRate(movie.getId(), rating);
                     });
                 } else {
-                    handler.post(() -> Toast.makeText(MovieDetailsActivity.this, "Failed to submit rating", Toast.LENGTH_SHORT).show());
+                    handler.post(() -> Toast.makeText(MovieDetailsActivity.this, getString(R.string.failedToSubmitRating), Toast.LENGTH_SHORT).show());
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                handler.post(() -> Toast.makeText(MovieDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show());
+                handler.post(() -> Toast.makeText(MovieDetailsActivity.this, getString(R.string.errorOccurred), Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -238,11 +311,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     guestSessionId = jsonObject.getString("guest_session_id");
                     // You might want to save this ID for future use
                 } else {
-                    handler.post(() -> Toast.makeText(MovieDetailsActivity.this, "Failed to create guest session", Toast.LENGTH_SHORT).show());
+                    handler.post(() -> Toast.makeText(MovieDetailsActivity.this, getString(R.string.failedToCreateGuestSession), Toast.LENGTH_SHORT).show());
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                handler.post(() -> Toast.makeText(MovieDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show());
+                handler.post(() -> Toast.makeText(MovieDetailsActivity.this, getString(R.string.errorOccurred), Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -265,6 +338,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
+        if (id == R.id.action_change_language) {
+//            AppUtils.toggleLanguage(this, MovieDetailsActivity.class);
+            Toast.makeText(getApplicationContext(),"Change it through the Main Page", Toast.LENGTH_SHORT).show();
+            return true;
+        } else
         if (id == R.id.action_watchlist) {
             // Navigate to WatchListActivity
             Intent intent = new Intent(this, WatchListActivity.class);
@@ -280,7 +358,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void updateIconStates() {
-        MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(this);
+        MovieDatabaseHelper dbHelper = new MovieDatabaseHelper(getApplicationContext());
 
         boolean isInFavorites = dbHelper.isExist(movie.getId());
         boolean isInWatchlist = dbHelper.isMovieInWatchlist(movie.getId());
@@ -297,5 +375,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
             watchIcon.setImageResource(R.drawable.watchlist_moviedetail);
         }
     }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String language = newBase.getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                .getString("Language", Locale.getDefault().getLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
 
 }

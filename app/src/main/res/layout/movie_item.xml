@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -5,19 +6,19 @@
     android:padding="8dp"
     android:background="@drawable/border_background"
     android:layout_marginBottom="10dp">
-    <!-- Poster Image on the Right -->
+
+    <!-- Poster Image -->
     <ImageView
         android:id="@+id/posterImage"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:contentDescription="Poster Image"
+        android:contentDescription="@string/posterImageDescription"
         android:scaleType="centerCrop"
         android:layout_marginStart="8dp"
-        android:background="@drawable/rounded_corner"/>
+        android:background="@drawable/rounded_corner" />
 
     <!-- Text and Icons Section -->
     <LinearLayout
-
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -29,20 +30,22 @@
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/movieTitleText"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Overview with fixed text length -->
+        <!-- Overview -->
         <TextView
             android:id="@+id/textOverview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/movieOverviewText"
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="14sp"
             android:paddingTop="4dp" />
 
-        <!-- Action Icons: Watch, Favorite, Details -->
+        <!-- Action Icons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_watch_later_24"
-                android:contentDescription="Watch Icon"
+                android:contentDescription="@string/watchIconDescription"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp" />
 
@@ -66,21 +69,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_favorite_border_24"
-                android:contentDescription="Favorite Icon"
+                android:contentDescription="@string/favoriteIconDescription"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp" />
 
-            <!-- Eye Icon for Details -->
+            <!-- Details Icon -->
             <ImageButton
                 android:id="@+id/detailsIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_remove_red_eye_24"
-                android:contentDescription="Details Icon"
+                android:contentDescription="@string/detailsIconDescription"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp" />
         </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>

@@ -2,8 +2,7 @@
     <string name="app_name">IMDB-like</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string-array name="search_types">
@@ -12,40 +11,60 @@
         <item>Actor Name</item>
     </string-array>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <string name="showTopRated">Show Top Rated</string>
+    <string name="searchMovie">Search Movies...</string>
+    <string name="showRecent">Show Recent</string>
+    <string name="moviePoster">Movie Poster</string>
+    <string name="movieTitle">Movie Title</string>
+    <string name="releaseDate">Release Date: </string>
+    <string name="yourRate">Your Rate </string>
+    <string name="genre_crime">Crime</string>
+    <string name="genre_drama">Drama</string>
+    <string name="genre_action">Action</string>
+    <string name="genre_animation">Animation</string>
+    <string name="genre_all">All</string>
+    <string name="language">Language</string>
+    <string name="rateCount">Rate Count:</string>
+    <string name="rate">Rate</string>
+    <string name="watchlistIcon">Watchlist Icon</string>
+    <string name="favoriteIcon">Favorite Icon</string>
+    <string name="rateMovie">Rate Movie</string>
+    <string name="overview">Overview</string>
+    <string name="movieOverviewGoesHere">Movie overview goes here...</string>
+    <string name="failedToSubmitRating">Failed to submit rating</string>
+    <string name="failedToCreateGuestSession">Failed to create guest session</string>
+    <string name="watchList">Watch List</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="recentMovies">Recent Movies</string>
+    <string name="lorem">ss</string>
+    <string name="change_language">Change Language</string>
+
+    <string name="topRatedMovies">Top Rated Movies</string>
+    <string name="errorOccurred">An error occurred</string>
+    <string name="failedToFetchMovies">Failed to fetch movies</string>
+    <string name="favorites">Favorites</string>
+    <string name="removedFromFavorites">Removed from Favorites</string>
+    <string name="addedToFavorites">Added to Favorites</string>
+    <string name="removedFromWatchList">Removed from Watch List</string>
+    <string name="addedToWatchList">Added to Watch List</string>
+    <string name="ratingAverage">Rating Average: </string>
+    <string name="guestSessionNotAvailable">Guest session not available</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+
+    <string name="watchIconDescription">Watch Icon</string>
+    <string name="favoriteIconDescription">Favorite Icon</string>
+    <string name="detailsIconDescription">Details Icon</string>
+    <string name="posterImage">Poster Image</string>
+    <string name="movieOverviewDescription">Movie overview goes here...</string>
+    <string name="deleteIcon">Delete Icon</string>
+
+    <string name="posterImageDescription">Poster Image</string>
+    <string name="movieTitleText">Movie Title</string>
+    <string name="movieOverviewText">Movie overview goes here...</string>
+    <string name="deleteIconDescription">Delete Icon</string>
+
 </resources>

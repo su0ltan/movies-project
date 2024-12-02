@@ -2,12 +2,12 @@ package com.example.mainactivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
-import com.example.mainactivity.models.Person;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,15 +15,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
+
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,9 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -41,6 +35,7 @@ import android.widget.ToggleButton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,10 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private EditText editTextSearch;
     private ToggleButton toggleButton;
+    private TextView tvAnimation, tvAll,tvAction, tvDrama, tvCrime;
     private boolean isShowingRecentMovies = true; // Default to showing recent movies
 
 
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>(); // Avoid null issues
+
     private List<Movie> filteredMovies; // Filtered results
 
 
@@ -84,10 +81,36 @@ public class MainActivity extends AppCompatActivity {
         }
         toggleButton = findViewById(R.id.toggleButton);
 
+
+        // Initialize TextViews
+        tvAnimation = findViewById(R.id.tvAnimation);
+        tvAction = findViewById(R.id.tvAction);
+        tvDrama = findViewById(R.id.tvDrama);
+        tvCrime = findViewById(R.id.tvCrime);
+        tvAll = findViewById(R.id.tvAll);
+
+        // Set click listeners
+        setGenreClickListener(tvAnimation);
+        setGenreClickListener(tvAction);
+        setGenreClickListener(tvDrama);
+        setGenreClickListener(tvCrime);
+
+        setGenreClickListener(tvAll);
+
+
         // Set up the ToggleButton listener
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isShowingRecentMovies = !isChecked; // Toggle between recent and top rated
             updateMovieList();
+            if (isChecked) {
+                // State: Show Recent
+                toggleButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_watch_later_yellow, 0, 0, 0);
+
+            } else {
+                // State: Show Top Rated
+                toggleButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_star_rate_24, 0, 0, 0);
+
+            }
         });
 
         updateMovieList();
@@ -120,11 +143,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setGenreClickListener(TextView textView) {
+        textView.setOnClickListener(view -> {
+            // Reset all TextView styles
+            resetGenreStyles();
+
+            // Apply shadow effect to the selected TextView
+         textView.setBackground(getDrawable(R.drawable.cloud_text_selected_bg));
+
+            if (textView.getId() == R.id.tvAll) {
+                filterMovies(""); // Clear filter
+            } else  if (textView.getId() == R.id.tvAction) {
+                filterMovies("action"); // Clear filter
+            }  if (textView.getId() == R.id.tvAnimation) {
+                filterMovies("animation"); // Clear filter
+            } else if (textView.getId() == R.id.tvCrime) {
+                filterMovies("crime"); // Clear filter
+            } else if (textView.getId() == R.id.tvDrama) {
+                filterMovies("drama"); // Clear filter
+            }
+        });
+    }
+
+
+    private void resetGenreStyles() {
+        resetTextViewStyle(tvAnimation);
+        resetTextViewStyle(tvAction);
+        resetTextViewStyle(tvDrama);
+        resetTextViewStyle(tvCrime);
+        resetTextViewStyle(tvAll);
+    }
+
+
+    private void resetTextViewStyle(TextView textView) {
+        textView.setShadowLayer(0, 0, 0, 0);
+        textView.setTextColor(getResources().getColor(R.color.black));
+        textView.setBackground(getDrawable(R.drawable.cloud_text_bg));
+    }
 
     private void filterMovies(String query) {
         filteredMovies.clear();
 
-        if (query.isEmpty()) {
+        if (query.isEmpty() || query.equals("")) {
             filteredMovies.addAll(movies); // Show all movies if query is empty
         } else {
             String lowerCaseQuery = query.toLowerCase();
@@ -178,7 +238,10 @@ public class MainActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_watchlist) {
+        if (id == R.id.action_change_language) {
+            AppUtils.toggleLanguage(this, MainActivity.class);
+            return true;
+        } else if (id == R.id.action_watchlist) {
             // Navigate to WatchListActivity
             Intent intent = new Intent(this, WatchListActivity.class);
             startActivity(intent);
@@ -191,6 +254,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String language = newBase.getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                .getString("Language", Locale.getDefault().getLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
     }
 
     private void fetchMovies(boolean fetchRecentMovies) {
@@ -222,14 +301,8 @@ public class MainActivity extends AppCompatActivity {
 
                     movies = Movie.parseMovies(response.body().string());
 
-                    System.out.println("mmm "+movies.get(1).getTitle());
-                    System.out.println("mmm "+movies.get(1).getId());
 
-                    movies.get(1).genres.forEach(s -> {
 
-                       System.out.println("mmm "+s);
-
-                   });
 
 
 
@@ -238,19 +311,19 @@ public class MainActivity extends AppCompatActivity {
                         movieAdapter.notifyDataSetChanged();
                         if (fetchRecentMovies) {
                             if (getSupportActionBar() != null) {
-                                getSupportActionBar().setTitle("Recent Movies");
+//                                getSupportActionBar().setTitle(getString(R.string.recentMovies));
                             }
                         } else {
                             if (getSupportActionBar() != null) {
-                                getSupportActionBar().setTitle("Top Rated Movies");
+//                                getSupportActionBar().setTitle(getString(R.string.topRatedMovies));
                             }
                         }});
                 } else {
-                    mainThreadHandler.post(() -> Toast.makeText(MainActivity.this, "Failed to fetch movies", Toast.LENGTH_SHORT).show());
+                    mainThreadHandler.post(() -> Toast.makeText(MainActivity.this, getString(R.string.failedToFetchMovies), Toast.LENGTH_SHORT).show());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                mainThreadHandler.post(() -> Toast.makeText(MainActivity.this, "An error occurred", Toast.LENGTH_SHORT).show());
+                mainThreadHandler.post(() -> Toast.makeText(MainActivity.this, getString(R.string.errorOccurred), Toast.LENGTH_SHORT).show());
             }
         });
 
@@ -263,9 +336,9 @@ public class MainActivity extends AppCompatActivity {
             recyclerViewMovies.setAdapter(movieAdapter);
         TextView txtRecentMovies = findViewById(R.id.txtRecentMovies);
         if (isShowingRecentMovies) {
-            txtRecentMovies.setText("Recent Movies");
+            txtRecentMovies.setText(getString(R.string.recentMovies));
         } else {
-            txtRecentMovies.setText("Top Rated Movies");
+            txtRecentMovies.setText(getString(R.string.topRatedMovies));
         }
     }
     private void updateMovieList() {

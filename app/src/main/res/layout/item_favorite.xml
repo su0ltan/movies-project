@@ -6,19 +6,19 @@
     android:padding="8dp"
     android:background="@drawable/border_background"
     android:layout_marginBottom="10dp">
+
     <!-- Poster Image on the Right -->
     <ImageView
         android:id="@+id/posterImage1"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:contentDescription="Poster Image"
+        android:contentDescription="@string/posterImage"
         android:scaleType="centerCrop"
         android:layout_marginStart="8dp"
-        android:background="@drawable/rounded_corner"/>
+        android:background="@drawable/rounded_corner" />
 
     <!-- Text and Icons Section -->
     <LinearLayout
-
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -30,6 +30,7 @@
             android:id="@+id/textTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/movieTitle"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -38,6 +39,7 @@
             android:id="@+id/textOverview2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/movieOverviewDescription"
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="14sp"
@@ -57,12 +59,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_delete_24"
-                android:contentDescription="Watch Icon"
+                android:contentDescription="@string/deleteIcon"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="4dp" />
 
         </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>

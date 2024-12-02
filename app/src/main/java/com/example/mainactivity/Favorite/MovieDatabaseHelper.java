@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,16 @@ import java.util.List;
 public class MovieDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Movie.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     public static final String TABLE_MOVIES = "movies";
     public static final String COLUMN_ID = "id";
     public static final String TABLE_WATCHLIST = "watchlist";
     public static final String COLUMN_WATCHLIST_ID = "id";
+
+    public  static  final  String TABLE_RATE = "movieRate";
+    public static final String COLUMN_RATE = "rate";
+    public static final String COLUMN_RATE_ID = "movieId";
+
 
 
 
@@ -35,6 +41,13 @@ public class MovieDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_WATCHLIST_ID + " INTEGER PRIMARY KEY" +
                 ")";
         db.execSQL(CREATE_WATCHLIST_TABLE);
+
+        String CREATE_RATE_TABLE = "CREATE TABLE " + TABLE_RATE + " (" +
+                COLUMN_RATE_ID + " INTEGER PRIMARY KEY, " +
+                COLUMN_RATE + " REAL" +
+                ")";
+        db.execSQL(CREATE_RATE_TABLE);
+
     }
 
     @Override
@@ -42,8 +55,54 @@ public class MovieDatabaseHelper extends SQLiteOpenHelper {
         // Handle database upgrades if the version changes
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WATCHLIST);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RATE);
         onCreate(db);
     }
+
+    public void insertRate(int movieId, double rate) {
+        SQLiteDatabase db = this.getWritableDatabase(); // Get a writable database instance
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_RATE_ID, movieId); // Add the movieId
+        values.put(COLUMN_RATE, rate);      // Add the rate
+
+        // Insert the values into the database
+        long result = db.insert(TABLE_RATE, null, values);
+
+        if (result == -1) {
+            Log.e("Database", "Failed to insert rate for movieId: " + movieId);
+        } else {
+            Log.d("Database", "Successfully inserted rate for movieId: " + movieId);
+        }
+
+        db.close(); // Close the database connection
+    }
+    public boolean isRated(int movieId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT 1 FROM " + TABLE_RATE + " WHERE " + COLUMN_RATE_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(movieId)});
+        boolean exists = cursor.moveToFirst(); // Returns true if the cursor is not empty
+        cursor.close();
+        db.close();
+        return exists;
+    }
+    public Double getRate(int movieId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_RATE + " FROM " + TABLE_RATE + " WHERE " + COLUMN_RATE_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(movieId)});
+
+        Double rate = null;
+        if (cursor.moveToFirst()) {
+            rate = cursor.getDouble(0); // Get the first column (rate) value
+        }
+
+        cursor.close();
+        db.close();
+        return rate; // Returns null if the movieId does not exist
+    }
+
+
+
 
     public long insertMovie(int id) {
         // Get writable database

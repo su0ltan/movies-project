@@ -67,7 +67,7 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.Watc
             watchList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, watchList.size());
-            Toast.makeText(context, "Removed from Watch List", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.removedFromWatchList), Toast.LENGTH_SHORT).show();
         });
     }
 

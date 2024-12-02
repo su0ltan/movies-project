@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">IMDB-like</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="next">امام</string>
+    <string name="previous">خلف</string>
+    <string-array name="search_types">
+        <item>الكلمات الدلاية</item>
+        <item>التصنيف</item>
+        <item>اسم الممثل</item>
+    </string-array>
+    <string name="searchMovie">بحث عن فلم...</string>
+    <string name="showTopRated">الأعلى تقييم</string>
+    <string name="showRecent">الأحدث</string>
+    <string name="recentMovies">احدث الافلام</string>
+    <string name="moviePoster">ملصق الفيلم</string>
+    <string name="movieTitle">عنوان الفيلم</string>
+    <string name="releaseDate">تاريخ الإصدار: </string>
+    <string name="language">اللغة</string>
+    <string name="rateCount">عدد التقييمات: </string>
+    <string name="rate">التقييم </string>
+    <string name="watchlistIcon">أيقونة قائمة المشاهدة</string>
+    <string name="favoriteIcon">أيقونة المفضلة</string>
+    <string name="rateMovie">قيم الفيلم</string>
+    <string name="overview">نظرة عامة</string>
+    <string name="movieOverviewGoesHere">نظرة عامة عن الفيلم تظهر هنا...</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="posterImage">صورة الملصق</string>
+    <string name="movieOverviewDescription">نظرة عامة عن الفيلم تظهر هنا...</string>
+    <string name="deleteIcon">أيقونة الحذف</string>
+    <string name="lorem">ss</string>
+    <string name="yourRate">تقييمك </string>
+
+    <string name="genre_crime">جريمة</string>
+    <string name="genre_drama">دراما</string>
+    <string name="genre_action">أكشن</string>
+    <string name="genre_animation">أنميشن</string>
+    <string name="genre_all">الكل</string>
+    <string name="watchList">قائمة المشاهدة</string>
+    <string name="change_language">تغيير اللغة</string>
+
+    <string name="topRatedMovies">الأفلام الأعلى تقييماً</string>
+    <string name="errorOccurred">حدث خطأ</string>
+    <string name="failedToFetchMovies">فشل في جلب الأفلام</string>
+    <string name="favorites">المفضلة</string>
+    <string name="removedFromFavorites">تمت الإزالة من المفضلة</string>
+    <string name="addedToFavorites">تمت الإضافة إلى المفضلة</string>
+    <string name="removedFromWatchList">تمت الإزالة من قائمة المشاهدة</string>
+    <string name="addedToWatchList">تمت الإضافة إلى قائمة المشاهدة</string>
+    <string name="ratingAverage">متوسط التقييم: </string>
+
+    <string name="guestSessionNotAvailable">جلسة الضيف غير متوفرة</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">حسنًا</string>
+    <string name="failedToSubmitRating">فشل في إرسال التقييم</string>
+    <string name="failedToCreateGuestSession">فشل في إنشاء جلسة ضيف</string>
+
+
+
+    <string name="deleteIconDescription">أيقونة الحذف</string>
+
+    <string name="posterImageDescription">صورة الملصق</string>
+    <string name="movieTitleText">عنوان الفيلم</string>
+    <string name="movieOverviewText">نظرة عامة عن الفيلم تظهر هنا...</string>
+    <string name="watchIconDescription">أيقونة المشاهدة</string>
+    <string name="favoriteIconDescription">أيقونة المفضلة</string>
+    <string name="detailsIconDescription">أيقونة التفاصيل</string>
+
+
+
+
+
+
+
+
+</resources>

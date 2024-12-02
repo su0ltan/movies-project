@@ -1,8 +1,10 @@
 package com.example.mainactivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,6 +32,7 @@ import com.example.mainactivity.Favorite.MovieDatabaseHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,7 +59,7 @@ public class WatchListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_watch_list);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Watch List");
+            getSupportActionBar().setTitle(getString(R.string.watchList));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         watchListRecyclerView = findViewById(R.id.WatchList_recyclerViewMovies);
@@ -65,7 +68,7 @@ public class WatchListActivity extends AppCompatActivity {
         watchListRecyclerView.setAdapter(watchListAdapter);
 
         editTextSearch = findViewById(R.id.WatchList_editTextSearch);
-        filteredMovies = new ArrayList<>();
+//        filteredMovies = new ArrayList<>();
 
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
@@ -88,7 +91,7 @@ public class WatchListActivity extends AppCompatActivity {
 
         executorService = Executors.newFixedThreadPool(3);
         mainHandler = new Handler(Looper.getMainLooper());
-        fetchMovies();
+//        fetchMovies();
     }
 
     private void filterMovies(String query) {
@@ -128,9 +131,14 @@ public class WatchListActivity extends AppCompatActivity {
         watchListRecyclerView.setAdapter(watchListAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-
-
+        filteredMovies = new ArrayList<>();
+        movieList = new ArrayList<>();
+        fetchMovies();
+    }
 
     private void fetchMovies() {
         executorService.execute(() -> {
@@ -153,7 +161,9 @@ public class WatchListActivity extends AppCompatActivity {
                         Movie movie = Movie.parseMovie(response.body().string());
                         mainHandler.post(() -> {
                             movieList.add(movie);
-                            watchListAdapter.notifyDataSetChanged();
+//                            watchListAdapter.notifyDataSetChanged();
+                            watchListAdapter = new WatchListAdapter(this, movieList);
+                            watchListRecyclerView.setAdapter(watchListAdapter);
                         });
                     } else {
                         Log.e("WatchList", "Failed to fetch movie with ID " + id);
@@ -187,7 +197,10 @@ public class WatchListActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
+        if (id == R.id.action_change_language) {
+            AppUtils.toggleLanguage(this, WatchListActivity.class);
+            return true;
+        } else if (id == android.R.id.home) {
             // Handle the Up button
             finish();
             return true;
@@ -203,4 +216,17 @@ public class WatchListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String language = newBase.getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                .getString("Language", Locale.getDefault().getLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.example.mainactivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -38,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -77,7 +80,6 @@ public class FavoritesActivity extends AppCompatActivity {
 
 
         editTextSearch = findViewById(R.id.Favorites_editTextSearch);
-        filteredMovies = new ArrayList<>();
 
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
@@ -101,13 +103,13 @@ public class FavoritesActivity extends AppCompatActivity {
 
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Favorites");
+            getSupportActionBar().setTitle(getString(R.string.favorites));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         executorService = Executors.newFixedThreadPool(3); // Create a thread pool of 3 threads
         mainHandler = new Handler(Looper.getMainLooper());
-        fetchMovies();
+//        fetchMovies();
     }
 
 
@@ -170,7 +172,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             favoriteAdapter = new FavoriteAdapter(this, movieList);
                             favoriteRecylcle.setAdapter(favoriteAdapter);
                         });
-                        Log.d("xxx11", movie.getTitle());
+
                     } else {
                         Log.e("fetchMovies", "Failed to fetch movie with ID " + id);
                     }
@@ -190,7 +192,15 @@ public class FavoritesActivity extends AppCompatActivity {
         favoriteRecylcle.setAdapter(favoriteAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        filteredMovies = new ArrayList<>();
+        movies = new ArrayList<>();
+        movieList = new ArrayList<>();
+        fetchMovies();
 
+    }
 
     private void updateRecyclerView(Movie movie) {
         favoriteAdapter.updateData(movie);
@@ -208,8 +218,10 @@ public class FavoritesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        if (id == android.R.id.home) {
+        if (id == R.id.action_change_language) {
+            AppUtils.toggleLanguage(this, FavoritesActivity.class);
+            return true;
+        } else if (id == android.R.id.home) {
             // Handle the Up button
             finish();
             return true;
@@ -225,4 +237,17 @@ public class FavoritesActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String language = newBase.getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                .getString("Language", Locale.getDefault().getLanguage());
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
 }
