@@ -137,6 +137,13 @@ public class FavoritesActivity extends AppCompatActivity {
                     }
                 }
 
+                for (String actor : movie.getActors()) {
+                    if (actor.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other genres
+                    }
+                }
+
                 // Check ac
             }
         }
@@ -144,6 +151,8 @@ public class FavoritesActivity extends AppCompatActivity {
         // Update UI with the filtered list
         updateRecyclerView(filteredMovies);
     }
+
+
     private void fetchMovies() {
         executorService.execute(() -> {
             OkHttpClient client = new OkHttpClient();
@@ -186,7 +195,6 @@ public class FavoritesActivity extends AppCompatActivity {
         });
     }
 
-
     private void updateRecyclerView(List<Movie> movies) {
         favoriteAdapter = new FavoriteAdapter(this,movies);
         favoriteRecylcle.setAdapter(favoriteAdapter);
@@ -199,6 +207,7 @@ public class FavoritesActivity extends AppCompatActivity {
         movies = new ArrayList<>();
         movieList = new ArrayList<>();
         fetchMovies();
+
 
     }
 

@@ -118,6 +118,13 @@ public class WatchListActivity extends AppCompatActivity {
                     }
                 }
 
+                for (String actor : movie.getActors()) {
+                    if (actor.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other genres
+                    }
+                }
+
                 // Check ac
             }
         }

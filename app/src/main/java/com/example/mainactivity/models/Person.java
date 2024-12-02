@@ -154,8 +154,6 @@ public class Person {
                 ", order=" + order +
                 '}';
     }
-
-
     public static List<Person> parsePerson(String jsonResponse) {
         List<Person> persons = new ArrayList<>();
 
@@ -166,27 +164,24 @@ public class Person {
             for (int i = 0; i < castArray.length(); i++) {
                 JSONObject personObject = castArray.getJSONObject(i);
 
-                if(personObject.getString("known_for_department").equals("acting")){
-                    System.out.println(  personObject.getString("name") + "aaa");
+                // Check if the person is in the Acting department
+                if ("Acting".equalsIgnoreCase(personObject.optString("known_for_department", ""))) {
                     Person person = new Person(
-                            personObject.getBoolean("adult"),
-                            personObject.getInt("gender"),
-                            personObject.getInt("id"),
-                            personObject.getString("known_for_department"),
-                            personObject.getString("name"),
-                            personObject.getString("original_name"),
-                            personObject.getDouble("popularity"),
+                            personObject.optBoolean("adult", false),
+                            personObject.optInt("gender", 0),
+                            personObject.optInt("id", 0),
+                            personObject.optString("known_for_department", ""),
+                            personObject.optString("name", ""),
+                            personObject.optString("original_name", ""),
+                            personObject.optDouble("popularity", 0.0),
                             personObject.optString("profile_path", null),
-                            personObject.getInt("cast_id"),
-                            personObject.getString("character"),
-                            personObject.getString("credit_id"),
-                            personObject.getInt("order")
+                            personObject.optInt("cast_id", 0),
+                            personObject.optString("character", ""),
+                            personObject.optString("credit_id", ""),
+                            personObject.optInt("order", 0)
                     );
                     persons.add(person);
                 }
-
-
-
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -194,4 +189,5 @@ public class Person {
 
         return persons;
     }
+
 }

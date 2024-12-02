@@ -1,4 +1,6 @@
 package com.example.mainactivity;
+import static com.example.mainactivity.models.Person.parsePerson;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -24,11 +26,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 public class Movie implements Serializable{
 
     public boolean isItInFavorite = false;
     public boolean isItInWatch = false;
-    public List<Person>actors;
+    public List<String>actors;
     private boolean adult;
     private String backdropPath;
     private List<Integer> genreIds;
@@ -86,9 +89,17 @@ public class Movie implements Serializable{
     private double voteAverage;
     private int voteCount;
 
+    public List<String> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
     // Constructor
     public Movie(String title, String overview, String posterPath, String backdropPath, String releaseDate,
-                 double voteAverage, int voteCount, int id, boolean adult, List<Integer> genreIds, String originalTitle , String originalLanguage, List<String> genre, List<Person> p) {
+                 double voteAverage, int voteCount, int id, boolean adult, List<Integer> genreIds, String originalTitle , String originalLanguage, List<String> genre, List<String> p) {
         this.title = title;
         this.overview = overview;
         this.posterPath = posterPath;
@@ -168,7 +179,7 @@ public class Movie implements Serializable{
     public static List<Movie> parseMovies(String jsonResponse) {
         List<Movie> movies = new ArrayList<>();
 
-        List<Person> p;
+
 
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -189,8 +200,26 @@ public class Movie implements Serializable{
                 int id = movieObject.getInt("id");
                 boolean adult = movieObject.getBoolean("adult");
 
-//                p = getActors(id);
-                p = new ArrayList<>();
+
+                List<String>  p  = new ArrayList<>();
+
+                //here is the code. the problem here is the code asycn it will  not wait
+                //untill  the data come
+//                getActors(movieObject.getInt("id"), new Callback<List<Person>>() {
+//                    @Override
+//                    public void onResponse(List<Person> result) {
+//
+//                        for (Person person : result) {
+//                            p.add(person.getName());
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception e) {
+//
+//                    }
+//                });
 
                 // Parse genre IDs
                 List<Integer> genreIds = new ArrayList<>();
@@ -227,77 +256,79 @@ public class Movie implements Serializable{
         return movies;
     }
 
-//    private static List<Person> getActors(int id) {
-//
-//        final List<Person>[] persons = new List[]{new ArrayList<>()};
-//
-//
-//         final ExecutorService executorService = Executors.newSingleThreadExecutor();
-//         final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-//        executorService.execute(() -> {
-//            OkHttpClient client = new OkHttpClient();
-//
-//            String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
-//
-//
-//            Request request = new Request.Builder()
-//                    .url("https://api.themoviedb.org/3/movie/"+id+"/credits?language=en-US")
-//                    .get()
-//                    .addHeader("accept", "application/json")
-//                    .addHeader("Authorization", "Bearer "+ key)
-//                    .build();
-//
-//            try {
-//                Response response = client.newCall(request).execute();
-//                if (response.isSuccessful() && response.body() != null) {
-//                    // Parse response to list of movies
-//
-//
-//                    persons[0] = Person.parsePerson(response.body().string());
-//
-//
-//
-//
-//                    // Update UI on the main thread
-//                } else {
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//
-//        return persons[0];
-//
-//    }
 
-    public static Movie parseMovie(String jsonResponse) {
 
-        JSONObject jsonObject = null;
-        Movie movie = null;
+    private static void getActors(int id, Callback<List<Person>> callback) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        OkHttpClient client = new OkHttpClient();
+        String key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNTdiZGRmMjNmYWE3ZGU3YWIzOGI0OWMyOTZkZjVkNCIsIm5iZiI6MTczMTM0MTIzNy44Nzc5NzI0LCJzdWIiOiI2NzMyMmEzODBkNzU4MDQwZWI0YjFjMzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.tAcIRUOQtdPSkaEo_7c9ah6CPJAeYgwVYD11ntBdp4Q";
+
+
+        executorService.execute(() -> {
+            Request request = new Request.Builder()
+                    .url("https://api.themoviedb.org/3/movie/" + id + "/credits?language=en-US")
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", "Bearer " + key)
+                    .build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseBody = response.body().string();
+                    List<Person> persons = parsePerson(responseBody);
+
+                    // Pass the result back to the main thread via callback
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onResponse(persons));
+                } else {
+                    // Handle unsuccessful response
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("Failed to fetch data")));
+                }
+            } catch (IOException e) {
+                // Handle exception
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }public static Movie parseMovie(String jsonResponse) {
+        JSONObject jsonObject;
+        Movie movie;
+
         try {
             jsonObject = new JSONObject(jsonResponse);
-            List <Integer> genreIds = new ArrayList<>();
-         JSONArray genreIdsArray = jsonObject.getJSONArray("genres");
 
-
-
-
-
-         List<Person> p = new ArrayList<>();
-
+            // Parse genres
+            JSONArray genreIdsArray = jsonObject.getJSONArray("genres");
+            List<Integer> genreIds = new ArrayList<>();
             List<String> genre = new ArrayList<>();
             for (int j = 0; j < genreIdsArray.length(); j++) {
                 JSONObject genreObject = genreIdsArray.getJSONObject(j); // Get the object at index j
                 String name = genreObject.getString("name"); // Extract the "name" field
                 genre.add(name);
-
             }
 
+            // Placeholder for actor names
+            List<String> p = new ArrayList<>();
 
+            // Fetch actors asynchronously
+            getActors(jsonObject.getInt("id"), new Callback<List<Person>>() {
+                @Override
+                public void onResponse(List<Person> result) {
+                    // Populate actor names
+                    for (Person person : result) {
+                        p.add(person.getName());
+                    }
+                    // Optional: Notify the UI or other parts of the program about the update
+//                    System.out.println("Actors updated: " + p);
+                }
 
+                @Override
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
+                }
+            });
 
-
-            movie  = new Movie(
+            // Create and return the Movie object with initial actor list
+            movie = new Movie(
                     jsonObject.getString("title"),
                     jsonObject.getString("overview"),
                     jsonObject.getString("poster_path"),
@@ -308,26 +339,17 @@ public class Movie implements Serializable{
                     jsonObject.getInt("id"),
                     jsonObject.getBoolean("adult"),
                     genreIds,
-
                     jsonObject.getString("original_title"),
                     jsonObject.getString("original_language"),
                     genre,
-                    p
-
-
-
-
+                    p // Initially empty list
             );
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
-
-
         }
 
-
-
         return movie;
-
     }
 
 
