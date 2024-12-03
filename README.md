@@ -48,16 +48,16 @@ Movie Explorer is an Android application for discovering and managing movies, de
 ## Screenshots
 
 ### 1. Search by Actor Name
-<img src="./images/1.jpg" alt="Search by Actor Name" width="600" height="400" style="mamx-width:200px; max-height:300px;">
+<img src="./images/1.jpg" alt="Search by Actor Name" width="200" height="300" style="mamx-width:200px; max-height:300px;">
 
 ### 2. Movie Details
-<img src="./images/2.jpg" alt="Movie Details" width="600" height="400" style="max-width:200px; max-height:300px;">
+<img src="./images/2.jpg" alt="Movie Details" width="200" height="300" style="max-width:200px; max-height:300px;">
 
 ### 3. Recent Movies (Genre Filter: Animation)
-<img src="./images/3.jpg" alt="Recent Movies - Animation Filter" width="600" height="400" style="max-width:200px; max-height:300px;">
+<img src="./images/3.jpg" alt="Recent Movies - Animation Filter" width="200" height="300" style="max-width:200px; max-height:300px;">
 
 ### 4. Recent Movies (All Genres)
-<img src="./images/5.jpg" alt="Recent Movies - All Genres" width="600" height="400" style="max-width:200px; max-height:300px;">
+<img src="./images/5.jpg" alt="Recent Movies - All Genres" width="200" height="300" style="max-width:200px; max-height:300px;">
 
 
 ---
