@@ -77,6 +77,18 @@ Movie Explorer is an Android application for discovering and managing movies, de
 
 ---
 
+## Collaboration
+
+This project was developed as a collaborative effort by:
+- **Suliman Aljarbou**  
+  Email: [isulimanm@gmail.com](mailto:isulimanm@gmail.com)  
+  GitHub: [isulimanm](https://github.com/isulimanm)
+- **Anas Alsubie**  
+  Email: [anas-alsubaie@hotmail.com](mailto:anas-alsubaie@hotmail.com)  
+  GitHub: [anas-alsubaie](http://Github.com/Anas-als3)
+
+---
+
 ## Setup and Installation
 
 ### Prerequisites
