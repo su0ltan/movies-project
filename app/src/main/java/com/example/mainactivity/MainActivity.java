@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
         textView.setBackground(getDrawable(R.drawable.cloud_text_bg));
     }
 
+// In MainActivity.java
+
     private void filterMovies(String query) {
         filteredMovies.clear();
 
@@ -205,7 +207,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                // Check ac
+                // Check actors
+                for (String actor : movie.getActors()) {
+                    if (actor.toLowerCase().contains(lowerCaseQuery)) {
+                        filteredMovies.add(movie);
+                        break; // Match found, no need to check other actors
+                    }
+                }
             }
         }
 
