@@ -47,17 +47,29 @@ Movie Explorer is an Android application for discovering and managing movies, de
 
 ## Screenshots
 
-### 1. Search by Actor Name
-<img src="./images/1.jpg" alt="Search by Actor Name" width="200" height="300" style="mamx-width:200px; max-height:300px;">
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
 
-### 2. Movie Details
-<img src="./images/2.jpg" alt="Movie Details" width="200" height="300" style="max-width:200px; max-height:300px;">
+  <!-- Row 1 -->
+  <div style="flex: 1; text-align: center;">
+    <img src="./images/1.jpg" alt="Search by Actor Name" width="200" height="300" style="max-width: 200px; max-height: 300px;">
+    <p>Search by Actor Name</p>
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="./images/2.jpg" alt="Movie Details" width="200" height="300" style="max-width: 200px; max-height: 300px;">
+    <p>Movie Details</p>
+  </div>
 
-### 3. Recent Movies (Genre Filter: Animation)
-<img src="./images/3.jpg" alt="Recent Movies - Animation Filter" width="200" height="300" style="max-width:200px; max-height:300px;">
+  <!-- Row 2 -->
+  <div style="flex: 1; text-align: center;">
+    <img src="./images/3.jpg" alt="Recent Movies - Animation Filter" width="200" height="300" style="max-width: 200px; max-height: 300px;">
+    <p>Recent Movies - Animation Filter</p>
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="./images/5.jpg" alt="Recent Movies - All Genres" width="200" height="300" style="max-width: 200px; max-height: 300px;">
+    <p>Recent Movies - All Genres</p>
+  </div>
 
-### 4. Recent Movies (All Genres)
-<img src="./images/5.jpg" alt="Recent Movies - All Genres" width="200" height="300" style="max-width:200px; max-height:300px;">
+</div>
 
 
 ---
