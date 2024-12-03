@@ -128,4 +128,4 @@ This project was developed as a collaborative effort by:
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/isulimanm/Movie_Explorer_Android_App.git
+git https://github.com/su0ltan/movies-project.git
